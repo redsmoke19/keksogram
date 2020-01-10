@@ -70,10 +70,6 @@ main {
   margin: 0 auto;
 }
 
-.help {
-  border: 1px solid black;
-}
-
 .modal-open {
   height: 100vh;
   overflow: hidden;
@@ -541,6 +537,7 @@ main {
 
   font-size: 0;
   border: 0;
+  z-index: 5;
 }
 
 .resize__control {

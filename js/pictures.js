@@ -327,12 +327,15 @@ for (var i = 0; i < forms.length; i++) {
 }
 // Находим в форме поле с именем type, timein, timeout это Select.
 var hashTagsInput = form.hashtags;
-console.log(hashTagsInput.id);
 
 function hasError(field) {
   if (field.disabled || field.type === 'file' || field.type === 'reset' || field.type === 'submit' || field.type === 'button') {
     return;
   }
+
+  var arrayLowerCase = [];
+  console.log(hashTagsInput.value.split(' '));
+
   var validity = field.validity;
   if (validity.valid) {
     return;

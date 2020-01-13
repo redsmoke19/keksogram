@@ -333,8 +333,35 @@ function hasError(field) {
     return;
   }
 
+  // Переводим все элементы, которые ввел пользователь в нижний регистр
   var arrayLowerCase = [];
-  console.log(hashTagsInput.value.split(' '));
+  var array = hashTagsInput.value.split(' ');
+  for (var i = 0; i < array.length; i++) {
+    arrayLowerCase[i] = array[i].toLowerCase();
+  }
+
+  // Функция проверяет есть ли повторяющиеся записи (нужно улучшить)
+  var checkUniqueValues = function(arr) {
+    for (var i = 0; i < arr.lenght - 1; i++) {
+      var unique = (arr.indexOf(arr[i], i + 1) > -1) ? false : true;
+    }
+    return unique;
+    // var k = 0;
+    // while (k < arr.length - 1) {
+    //   if (arr.indexOf(arr[k], k + 1) > -1) {
+    //     return false;
+    //   }
+    //   k++;
+    // }
+    // return true;
+  };
+
+  if (array.length > 5) {
+    return 'Хэштегов должно быть не больше пяти'
+  }
+  if (!checkUniqueValues(arrayLowerCase)) {
+    return 'Хэши не должны повторяться';
+  }
 
   var validity = field.validity;
   if (validity.valid) {

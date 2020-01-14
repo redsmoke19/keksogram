@@ -342,10 +342,12 @@ function hasError(field) {
 
   // Функция проверяет есть ли повторяющиеся записи (нужно улучшить)
   var checkUniqueValues = function(arr) {
-    for (var i = 0; i < arr.lenght - 1; i++) {
-      var unique = (arr.indexOf(arr[i], i + 1) > -1) ? false : true;
+    for (var i = 0; i < arr.length - 1; i++) {
+      if (arr.indexOf(arr[i], i + 1) > -1) {
+        return false;
+      }
     }
-    return unique;
+    return true;
     // var k = 0;
     // while (k < arr.length - 1) {
     //   if (arr.indexOf(arr[k], k + 1) > -1) {

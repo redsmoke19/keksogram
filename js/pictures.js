@@ -365,6 +365,18 @@ function hasError(field) {
     return 'Хэши не должны повторяться';
   }
 
+  for (var j = 0; j < arr.length; ++j) {
+    if (arr[j] === '#') {
+      userHashtags.setCustomValidity('Хэш-тег не может состоять из одной только решётки. Удалите лишний символ или дополните его.');
+    } else if (arr[j].charAt(0) !== '#') {
+      userHashtags.setCustomValidity('Хэш-тег ' + arr[j] + ' должен начинаться с символа "#".');
+    } else if (arr[j].slice(1).indexOf('#') !== -1) {
+      userHashtags.setCustomValidity('Хэш-теги ' + arr[j] + ' должны быть разделены пробелом.');
+    } else if (arr[j].length > 20) {
+      userHashtags.setCustomValidity('Максимальная длина одного хэш-тега составляет 20 символов, включая символ "#". Сократите хэш-тег ' + arr[j] + '.');
+    }
+  }
+
   var validity = field.validity;
   if (validity.valid) {
     return;

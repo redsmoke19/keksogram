@@ -124,7 +124,7 @@ var imageScaleSize = {
   default: 100,
   current: 100,
   step: 25
-}
+};
 
 // При нажатии на значек закрузки разблокирует форму редактирования фотографии и добавляет обработчики событий на него
 function uploadChangeHandler() {
@@ -149,10 +149,14 @@ function closeUpload() {
   deactivateEffect();
   removeFormValidity();
 }
-
+// Находим в форме поле с именем type, timein, timeout это Select.
+var hashTagsInput = form.hashtags;
+var textInput = form.querySelector('text__description');
 function closeEscHandler(evt) {
-  if (evt.keyCode === ESC_CODE) {
-    closeUpload();
+  if (document.activeElement !== hashTagsInput || document.activeElement !== textInput) {
+      if (evt.keyCode === ESC_CODE) {
+          closeUpload();
+      }
   }
 }
 // uploadChangeHandler()
@@ -322,14 +326,12 @@ function deactivateEffect() {
 // Валидация формы
 
 var forms = document.querySelectorAll('.novalidate');
-for (var i = 0; i < forms.length; i++) {
-  forms[i].setAttribute('novalidate', true);
+for (var v = 0; v < forms.length; v++) {
+  forms[v].setAttribute('novalidate', true);
 }
-// Находим в форме поле с именем type, timein, timeout это Select.
-var hashTagsInput = form.hashtags;
 
 function hasError(field) {
-  if (field.disabled || field.type === 'file' || field.type === 'reset' || field.type === 'submit' || field.type === 'button') {
+  if (field.disabled || field.type === 'file' || field.type === 'reset' || field.type === 'submit' || field.type === 'button' || field.type === 'radio') {
     return;
   }
 
@@ -348,14 +350,6 @@ function hasError(field) {
       }
     }
     return true;
-    // var k = 0;
-    // while (k < arr.length - 1) {
-    //   if (arr.indexOf(arr[k], k + 1) > -1) {
-    //     return false;
-    //   }
-    //   k++;
-    // }
-    // return true;
   };
 
   if (array.length > 5) {
@@ -365,35 +359,35 @@ function hasError(field) {
     return 'Хэши не должны повторяться';
   }
 
-  for (var j = 0; j < arr.length; ++j) {
-    if (arr[j] === '#') {
-      userHashtags.setCustomValidity('Хэш-тег не может состоять из одной только решётки. Удалите лишний символ или дополните его.');
-    } else if (arr[j].charAt(0) !== '#') {
-      userHashtags.setCustomValidity('Хэш-тег ' + arr[j] + ' должен начинаться с символа "#".');
-    } else if (arr[j].slice(1).indexOf('#') !== -1) {
-      userHashtags.setCustomValidity('Хэш-теги ' + arr[j] + ' должны быть разделены пробелом.');
-    } else if (arr[j].length > 20) {
-      userHashtags.setCustomValidity('Максимальная длина одного хэш-тега составляет 20 символов, включая символ "#". Сократите хэш-тег ' + arr[j] + '.');
+  for (var j = 0; j < array.length; ++j) {
+    if (array[j] === '#') {
+        return 'Хэш-тег не может состоять из одной только решётки. Удалите лишний символ или дополните его.';
+    } else if (array[j].charAt(0) !== '#') {
+        return 'Хэш-тег ' + array[j] + ' должен начинаться с символа "#".';
+    } else if (array[j].slice(1).indexOf('#') !== -1) {
+        return 'Хэш-теги ' + array[j] + ' должны быть разделены пробелом.';
+    } else if (array[j].length > 20) {
+        return 'Максимальная длина одного хэш-тега составляет 20 символов, включая символ "#". Сократите хэш-тег ' + array[j] + '.';
     }
   }
 
-  var validity = field.validity;
-  if (validity.valid) {
-    return;
-  }
-  if (validity.valueMissing) return 'Пожалуйста, заполните это поле. Оно обязательное';
-  if (validity.typeMismatch) {
-    if (field.type === 'email') return 'Пожалуйста, введите верное значение почты';
-    if (field.type === 'url') return 'Пожалуйста, введите правильный адрес ссылки';
-  }
-  if (validity.tooShort) return 'Длинна имени должна быть не менее ' + field.getAttribute('minLength') + ' символов. Вы ввели ' + field.value.length + ' символа.';
-  if (validity.tooLong) return 'Длинна имени должна быть не более ' + field.getAttribute('maxLength') + ' символов. Вы ввели ' + field.value.length + ' символа.';
-  if (validity.badInput) return 'Пожалуйста, введите число';
-  if (validity.stepMismatch) return 'Указано не верное значение';
-  if (validity.rangeOverflow) return 'Введенное значение слишком велико';
-  if (validity.rangeUnderflow) return 'Введенное значение слишком мало';
-  if (validity.patternMismatch) return 'неверный формат';
-  return 'Введенное значение не верно';
+    var validity = field.validity;
+    if (validity.valid) {
+        return;
+    }
+    if (validity.valueMissing) return 'Пожалуйста, заполните это поле. Оно обязательное';
+    if (validity.typeMismatch) {
+        if (field.type === 'email') return 'Пожалуйста, введите верное значение почты';
+        if (field.type === 'url') return 'Пожалуйста, введите правильный адрес ссылки';
+    }
+    if (validity.tooShort) return 'Длинна имени должна быть не менее ' + field.getAttribute('minLength') + ' символов. Вы ввели ' + field.value.length + ' символа.';
+    if (validity.tooLong) return 'Длинна имени должна быть не более ' + field.getAttribute('maxLength') + ' символов. Вы ввели ' + field.value.length + ' символа.';
+    if (validity.badInput) return 'Пожалуйста, введите число';
+    if (validity.stepMismatch) return 'Указано не верное значение';
+    if (validity.rangeOverflow) return 'Введенное значение слишком велико';
+    if (validity.rangeUnderflow) return 'Введенное значение слишком мало';
+    if (validity.patternMismatch) return 'неверный формат';
+    return 'Введенное значение не верно';
 }
 
 function showError(field, error) {

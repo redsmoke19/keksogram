@@ -17,7 +17,7 @@ function removeHidden(block) {
 // Спрятать блок
 
 function addHidden(block) {
-  block.classList.add('visually-hidden');
+  block.classList.add('hidden');
 }
 
 // Находим случайное число из диапазона чисео
@@ -67,16 +67,54 @@ for (var i = 0; i < elementsPhoto.length; i++) {
 }
 photoList.appendChild(fragment);
 
-function getBigPhoto() {
-  var bigPhoto = document.querySelector('.big-picture');
+var bigPhoto = document.querySelector('.big-picture');
+function getBigPhoto(photoArray) {
   removeHidden(bigPhoto);
-  bigPhoto.querySelector('.big-picture__img > img').src = elementsPhoto[0].url;
-  bigPhoto.querySelector('.big-picture__img > img').alt = elementsPhoto[0].alt;
-  bigPhoto.querySelector('.likes-count').textContent = elementsPhoto[0].likes;
+  bigPhoto.querySelector('.big-picture__img > img').src = photoArray.url;
+  bigPhoto.querySelector('.big-picture__img > img').alt = photoArray.alt;
+  bigPhoto.querySelector('.likes-count').textContent = photoArray.likes;
   bigPhoto.querySelector('.comments-count').textContent = USERS_COMMENTS.length;
-  bigPhoto.querySelector('.social__caption').textContent = elementsPhoto[0].description;
+  bigPhoto.querySelector('.social__caption').textContent = photoArray.description;
 }
 // getBigPhoto();
+
+var closeBigPhotoButton = document.querySelector('.big-picture__cancel');
+
+function showBigPhoto() {
+  let pictureImg = document.querySelectorAll('.picture__img');
+  for (let i = 0; i < pictureImg.length; i++) {
+    pictureImg[i].addEventListener('click', function() {
+      getBigPhoto(elementsPhoto[i]);
+      document.addEventListener('keydown', closeEscBigPhoto);
+      closeBigPhotoButton.addEventListener('click', closeBigPhoto);
+    })
+  }
+}
+// Та же функция но только через замыкание
+// function showBigPhoto() {
+//   var pictureImg = document.querySelectorAll('.picture__img');
+//   for (var i = 0; i < pictureImg.length; i++) {
+//     (function(y) {
+//       pictureImg[y].addEventListener('click', function() {
+//         getBigPhoto(elementsPhoto[y]);
+//       })
+//     })(i)
+//   }
+// }
+showBigPhoto();
+
+function closeBigPhoto() {
+  addHidden(bigPhoto);
+  document.removeEventListener('keydown', closeEscBigPhoto);
+  closeBigPhotoButton.removeEventListener('click', closeBigPhoto);
+}
+
+function closeEscBigPhoto(evt) {
+  if (evt.keyCode === ESC_CODE) {
+    closeBigPhoto();
+  }
+}
+
 
 function getCommentElement() {
   var commentsItem = document.createElement('li');
@@ -151,12 +189,14 @@ function closeUpload() {
 }
 // Находим в форме поле с именем type, timein, timeout это Select.
 var hashTagsInput = form.hashtags;
-var textInput = form.querySelector('text__description');
+var textInput = form.querySelector('.text__description');
+console.log(textInput);
+
 function closeEscHandler(evt) {
-  if (document.activeElement !== hashTagsInput || document.activeElement !== textInput) {
-      if (evt.keyCode === ESC_CODE) {
-          closeUpload();
-      }
+  if (document.activeElement !== hashTagsInput && document.activeElement !== textInput) {
+    if (evt.keyCode === ESC_CODE) {
+      closeUpload();
+    }
   }
 }
 // uploadChangeHandler()
@@ -361,33 +401,33 @@ function hasError(field) {
 
   for (var j = 0; j < array.length; ++j) {
     if (array[j] === '#') {
-        return 'Хэш-тег не может состоять из одной только решётки. Удалите лишний символ или дополните его.';
+      return 'Хэш-тег не может состоять из одной только решётки. Удалите лишний символ или дополните его.';
     } else if (array[j].charAt(0) !== '#') {
-        return 'Хэш-тег ' + array[j] + ' должен начинаться с символа "#".';
+      return 'Хэш-тег ' + array[j] + ' должен начинаться с символа "#".';
     } else if (array[j].slice(1).indexOf('#') !== -1) {
-        return 'Хэш-теги ' + array[j] + ' должны быть разделены пробелом.';
+      return 'Хэш-теги ' + array[j] + ' должны быть разделены пробелом.';
     } else if (array[j].length > 20) {
-        return 'Максимальная длина одного хэш-тега составляет 20 символов, включая символ "#". Сократите хэш-тег ' + array[j] + '.';
+      return 'Максимальная длина одного хэш-тега составляет 20 символов, включая символ "#". Сократите хэш-тег ' + array[j] + '.';
     }
   }
 
-    var validity = field.validity;
-    if (validity.valid) {
-        return;
-    }
-    if (validity.valueMissing) return 'Пожалуйста, заполните это поле. Оно обязательное';
-    if (validity.typeMismatch) {
-        if (field.type === 'email') return 'Пожалуйста, введите верное значение почты';
-        if (field.type === 'url') return 'Пожалуйста, введите правильный адрес ссылки';
-    }
-    if (validity.tooShort) return 'Длинна имени должна быть не менее ' + field.getAttribute('minLength') + ' символов. Вы ввели ' + field.value.length + ' символа.';
-    if (validity.tooLong) return 'Длинна имени должна быть не более ' + field.getAttribute('maxLength') + ' символов. Вы ввели ' + field.value.length + ' символа.';
-    if (validity.badInput) return 'Пожалуйста, введите число';
-    if (validity.stepMismatch) return 'Указано не верное значение';
-    if (validity.rangeOverflow) return 'Введенное значение слишком велико';
-    if (validity.rangeUnderflow) return 'Введенное значение слишком мало';
-    if (validity.patternMismatch) return 'неверный формат';
-    return 'Введенное значение не верно';
+  var validity = field.validity;
+  if (validity.valid) {
+    return;
+  }
+  if (validity.valueMissing) return 'Пожалуйста, заполните это поле. Оно обязательное';
+  if (validity.typeMismatch) {
+    if (field.type === 'email') return 'Пожалуйста, введите верное значение почты';
+    if (field.type === 'url') return 'Пожалуйста, введите правильный адрес ссылки';
+  }
+  if (validity.tooShort) return 'Длинна имени должна быть не менее ' + field.getAttribute('minLength') + ' символов. Вы ввели ' + field.value.length + ' символа.';
+  if (validity.tooLong) return 'Длинна имени должна быть не более ' + field.getAttribute('maxLength') + ' символов. Вы ввели ' + field.value.length + ' символа.';
+  if (validity.badInput) return 'Пожалуйста, введите число';
+  if (validity.stepMismatch) return 'Указано не верное значение';
+  if (validity.rangeOverflow) return 'Введенное значение слишком велико';
+  if (validity.rangeUnderflow) return 'Введенное значение слишком мало';
+  if (validity.patternMismatch) return 'неверный формат';
+  return 'Введенное значение не верно';
 }
 
 function showError(field, error) {

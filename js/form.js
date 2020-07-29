@@ -1,5 +1,5 @@
 'use strict';
-(function () {
+(function() {
   var bodyElement = document.querySelector('body');
   var form = document.querySelector('.img-upload__form');
   var uploadButton = document.querySelector('#upload-file');
@@ -17,7 +17,7 @@
     step: 25
   };
 
-// При нажатии на значек закрузки разблокирует форму редактирования фотографии и добавляет обработчики событий на него
+  // При нажатии на значек закрузки разблокирует форму редактирования фотографии и добавляет обработчики событий на него
   function uploadChangeHandler() {
     bodyElement.classList.add('modal-open');
     editForm.classList.remove('hidden');
@@ -29,7 +29,7 @@
     addFormValidity();
   }
 
-// При нажатии на крестик или Esc закрыает форму и удаляем обработчики событий
+  // При нажатии на крестик или Esc закрыает форму и удаляем обработчики событий
   function closeUpload() {
     bodyElement.classList.remove('modal-open');
     editForm.classList.add('hidden');
@@ -41,7 +41,7 @@
     removeFormValidity();
   }
 
-// Находим в форме поле с именем hashtags
+  // Находим в форме поле с именем hashtags
   var hashTagsInput = form.hashtags;
   var textInput = form.querySelector('.text__description');
 
@@ -53,19 +53,19 @@
     }
   }
 
-// uploadChangeHandler()
+  // uploadChangeHandler()
   uploadButton.addEventListener('change', uploadChangeHandler);
 
-//Изменяем маштаб по кликам на кнопки + и -
+  //Изменяем маштаб по кликам на кнопки + и -
 
-// Устанавливает значение размера в окошке отображения % масштаба, и так же трансформирует картинку согласно выбраного маштаба
+  // Устанавливает значение размера в окошке отображения % масштаба, и так же трансформирует картинку согласно выбраного маштаба
   function setImageScale(size) {
     scaleValue.value = `${size}%`;
     scaleImage.style.transform = `scale(${size / 100})`;
     imageScaleSize.current = size;
   }
 
-// Функция клика на кнопку -, уменьшает маштаб изображения
+  // Функция клика на кнопку -, уменьшает маштаб изображения
   function subtrackSizaValue() {
     if (imageScaleSize.min < imageScaleSize.current) {
       var newSize = imageScaleSize.current - imageScaleSize.step;
@@ -73,7 +73,7 @@
     }
   }
 
-// Функция клика на кнопку +, увеличивает маштаб изображения
+  // Функция клика на кнопку +, увеличивает маштаб изображения
   function addSizeValue() {
     if (imageScaleSize.max > imageScaleSize.current) {
       var newSize = imageScaleSize.current + imageScaleSize.step;
@@ -81,20 +81,20 @@
     }
   }
 
-// Функция активации слушателей на кнопки и так же задает настройки маштаба по умолчанию, эта фенкиця вызывается только тогда, когда открывается попап с настройкой и редактирование изображений
+  // Функция активации слушателей на кнопки и так же задает настройки маштаба по умолчанию, эта фенкиця вызывается только тогда, когда открывается попап с настройкой и редактирование изображений
   function activeteScaleButton() {
     setImageScale(imageScaleSize.default);
     scaleMinusBotton.addEventListener('click', subtrackSizaValue);
     scalePlusBotton.addEventListener('click', addSizeValue);
   }
 
-//Функция которая удаляет обработчики событий и с кнопок + и - при закрытие попапа редактирования изображений.
+  //Функция которая удаляет обработчики событий и с кнопок + и - при закрытие попапа редактирования изображений.
   function deactiveteScaleButton() {
     scaleMinusBotton.removeEventListener('click', subtrackSizaValue);
     scalePlusBotton.removeEventListener('click', addSizeValue);
   }
 
-// Применение эффекта для изображения
+  // Применение эффекта для изображения
 
   var defauleEffect = form.querySelector('#effect-none');
   var scalePin = form.querySelector('.scale__pin');
@@ -110,58 +110,58 @@
     chrome: {
       min: 0,
       max: 1,
-      setFilter: function (value) {
+      setFilter: function(value) {
         return `grayscale(${value})`
       }
     },
     sepia: {
       min: 0,
       max: 1,
-      setFilter: function (value) {
+      setFilter: function(value) {
         return `sepia(${value})`
       }
     },
     marvin: {
       min: 0,
       max: 100,
-      setFilter: function (value) {
+      setFilter: function(value) {
         return `invert(${value}%)`
       }
     },
     phobos: {
       min: 0,
       max: 3,
-      setFilter: function (value) {
+      setFilter: function(value) {
         return `blur(${value}px)`
       }
     },
     heat: {
       min: 1,
       max: 3,
-      setFilter: function (value) {
+      setFilter: function(value) {
         return `brightness(${value})`
       }
     },
     none: {
       min: 0,
       max: 0,
-      setFilter: function () {
+      setFilter: function() {
         return `none`
       }
     }
   };
 
-// Функция скрывает ползунок насыщенности фильра
+  // Функция скрывает ползунок насыщенности фильра
   function hideScaleField() {
     scaleField.classList.add('hidden');
   }
 
-//Функция показывает ползунок насыщенности фильтра
+  //Функция показывает ползунок насыщенности фильтра
   function showScaleField() {
     scaleField.classList.remove('hidden');
   }
 
-// Добалвяется класс картинке в соответствии с выбранным эффектом (радио кнопкой), и удаляет класс при выборе другого эффекта
+  // Добалвяется класс картинке в соответствии с выбранным эффектом (радио кнопкой), и удаляет класс при выборе другого эффекта
   function addEffectClass(value) {
     if (currentValueClass) {
       scaleImage.classList.remove(currentValueClass);
@@ -170,26 +170,26 @@
     currentValueClass = `effects__preview--${value}`;
   }
 
-// Генерирует число насыщенности эффекта (положение пина)
+  // Генерирует число насыщенности эффекта (положение пина)
   function getEffectValue(value, effectName) {
     var currentEffect = effects[effectName];
     return currentEffect.min + value * (currentEffect.max - currentEffect.min) / maxEffectValue;
   }
 
-// Применяет фильтр для изображения с необходимым значением value
+  // Применяет фильтр для изображения с необходимым значением value
   function setPinEffect(effectName) {
     var valueEffect = getEffectValue(effectValue.value, effectName);
     scaleImage.style.filter = effects[effectName].setFilter(valueEffect);
   }
 
-// Устанавливает пин и линию уровня эффекта в соответствии с value
+  // Устанавливает пин и линию уровня эффекта в соответствии с value
   function setPinsPosition(value) {
     effectValue.value = value;
     scalePin.style.left = `${value}%`;
     scaleLevel.style.width = `${value}%`;
   }
 
-// Обработчик событий при клике на эффекты
+  // Обработчик событий при клике на эффекты
   function clickEffectsHandler(evt) {
     if (evt.target === defauleEffect) {
       hideScaleField();
@@ -201,7 +201,7 @@
     setPinsPosition(maxEffectValue);
   }
 
-// Функция активации по умолчанию при появлении формы редактирования
+  // Функция активации по умолчанию при появлении формы редактирования
   function activateEffect() {
     addEffectClass(defauleEffect.value);
     setPinEffect(defauleEffect.value);
@@ -212,14 +212,14 @@
     }
   }
 
-// Диактивация слушателей при закрытие окна редактирования
+  // Диактивация слушателей при закрытие окна редактирования
   function deactivateEffect() {
     for (var i = 0; i < effectsList.length; i++) {
       effectsList[i].removeEventListener('click', clickEffectsHandler);
     }
   }
 
-// Узнаем какой радио баттон выбран в данный момент и получаем его value
+  // Узнаем какой радио баттон выбран в данный момент и получаем его value
   function getRadioCurrent() {
     for (var i = 0; i < effectsList.length; i++) {
       if (effectsList[i].checked) {
@@ -228,11 +228,12 @@
     }
   }
 
-// Перетаскивание пина (DragAndDrop Pin)
+  // Перетаскивание пина (DragAndDrop Pin)
   function getDragPin() {
-    scalePin.addEventListener('mousedown', function (evt) {
+    scalePin.addEventListener('mousedown', function(evt) {
       evt.preventDefault();
       var startCoords = evt.clientX - scalePin.getBoundingClientRect().left;
+
       function onMouseMove(moveEvt) {
         moveEvt.preventDefault();
         var coordsLeft = moveEvt.clientX - startCoords - scaleLine.getBoundingClientRect().left;
@@ -248,6 +249,7 @@
         setPinsPosition((Math.round((coordsLeft * 100) / scaleLine.offsetWidth)));
         setPinEffect(getRadioCurrent());
       }
+
       function onMouseUp(upEvt) {
         upEvt.preventDefault();
         document.removeEventListener('mousemove', onMouseMove);
@@ -259,7 +261,7 @@
   }
   getDragPin();
 
-// Валидация формы
+  // Валидация формы
 
   var forms = document.querySelectorAll('.novalidate');
   for (var v = 0; v < forms.length; v++) {
@@ -279,7 +281,7 @@
     }
 
     // Функция проверяет есть ли повторяющиеся записи (нужно улучшить)
-    var checkUniqueValues = function (arr) {
+    var checkUniqueValues = function(arr) {
       for (var i = 0; i < arr.length - 1; i++) {
         if (arr.indexOf(arr[i], i + 1) > -1) {
           return false;
@@ -399,4 +401,20 @@
     form.removeEventListener('submit', submitButtonHandler, false);
     form.removeEventListener('blur', fieldBlurHandler, true);
   }
+  var form = document.querySelector('.img-upload__form');
+  form.addEventListener('submit', function(evt) {
+    window.save(new FormData(form), function(response) {
+      closeUpload();
+    });
+    evt.preventDefault();
+  });
+
+  // let form = document.querySelector('.setup-wizard-form');
+  // form.addEventListener('submit', function (evt) {
+  //   window.save(new FormData(form), function(response) {
+  //     closePopup();
+  //   });
+  //   evt.preventDefault();
+  // });
+
 })();

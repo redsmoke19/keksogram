@@ -9,6 +9,7 @@
       try {
         let data = JSON.parse(xhr.responseText);
         onLoad(data);
+        document.querySelector('.img-filters').classList.remove('img-filters--inactive');
       } catch (error) {
         onError(error);
       }
